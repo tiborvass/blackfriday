@@ -18,6 +18,7 @@ package blackfriday
 import (
 	"bytes"
 	"fmt"
+	"html"
 	"strconv"
 	"strings"
 )
@@ -29,6 +30,7 @@ const (
 	HTML_SKIP_IMAGES                          // skip embedded images
 	HTML_SKIP_LINKS                           // skip all links
 	HTML_SKIP_SCRIPT                          // skip embedded <script> elements
+	HTML_ESCAPE_HTML                          // escape preformatted HTML blocks
 	HTML_SAFELINK                             // only link to trusted protocols
 	HTML_TOC                                  // generate a table of contents
 	HTML_OMIT_CONTENTS                        // skip the main contents (for a standalone table of contents)
@@ -170,6 +172,9 @@ func (options *Html) BlockHtml(out *bytes.Buffer, text []byte) {
 	doubleSpace(out)
 	if options.flags&HTML_SKIP_SCRIPT != 0 {
 		out.Write(stripTag(string(text), "script", "p"))
+	} else if options.flags&HTML_ESCAPE_HTML != 0 {
+		text = []byte(html.EscapeString(string(text)))
+		out.Write(text)
 	} else {
 		out.Write(text)
 	}
@@ -503,6 +508,9 @@ func (options *Html) RawHtmlTag(out *bytes.Buffer, text []byte) {
 	}
 	if options.flags&HTML_SKIP_SCRIPT != 0 && isHtmlTag(text, "script") {
 		return
+	}
+	if options.flags&HTML_ESCAPE_HTML != 0 {
+		text = []byte(html.EscapeString(string(text)))
 	}
 	out.Write(text)
 }

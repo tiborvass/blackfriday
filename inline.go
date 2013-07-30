@@ -180,10 +180,6 @@ const (
 
 // '[': parse a link or an image or a footnote
 func link(p *parser, out *bytes.Buffer, data []byte, offset int) int {
-	// no links allowed inside other links
-	if p.insideLink {
-		return 0
-	}
 
 	// [text] == regular link
 	// ![alt] == image
