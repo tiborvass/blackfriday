@@ -950,10 +950,6 @@ func (p *parser) uliPrefix(data []byte) int {
 			return 0
 		}
 
-		//avoid duplicated list item start token
-		if data[i] == data[i+1] {
-			return 0
-		}
 
 		//not list
 		if data[i+1] == '\n' {
