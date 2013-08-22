@@ -41,6 +41,7 @@ const (
 	EXTENSION_NO_EMPTY_LINE_BEFORE_BLOCK             // no need to insert an empty line to start a (code, quote, order list, unorder list)block
 	EXTENSION_NO_SPACE_LISTS                         // no need to put a space to start a list
 	EXTENSION_ONE_SPACE_INDENT                       // allow indent for list item when there is 1 or spaces
+	EXTENSION_UNICODE_LIST_ITEM                      // allow unicode as list item marker
 )
 
 // These are the possible flag values for the link renderer.

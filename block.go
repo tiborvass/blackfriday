@@ -15,6 +15,7 @@ package blackfriday
 
 import (
 	"bytes"
+	"unicode/utf8"
 )
 
 // Parse block-level data.
@@ -929,10 +930,20 @@ func (p *parser) uliPrefix(data []byte) int {
 		i++
 	}
 
+	hitUnicodeListItemMarker := false
+	r, sz := utf8.DecodeRune(data[i:])
+	if r == '–' && p.flags&EXTENSION_UNICODE_LIST_ITEM != 0 {
+		hitUnicodeListItemMarker = true
+	}
+
 	// need a *, +, or -
-	if data[i] != '*' && data[i] != '+' && data[i] != '-' {
+	if data[i] != '*' && data[i] != '+' && data[i] != '-' && !hitUnicodeListItemMarker {
 		return 0
 	}
+	if hitUnicodeListItemMarker {
+		i += sz-1
+	}
+
 	if data[i+1] != ' ' {
 		// need a *, +, or - followed by a space
 		if p.flags&EXTENSION_NO_SPACE_LISTS == 0 {

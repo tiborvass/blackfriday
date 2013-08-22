@@ -518,6 +518,12 @@ func TestUnorderedList(t *testing.T) {
 		"<ul>\n<li><p>List</p>\n\n<blockquote>\n<p>3 spaces indent quote</p>\n</blockquote></li>\n</ul>\n",
 	}...)
 	doTestsBlock(t, tests4, EXTENSION_ONE_SPACE_INDENT)
+
+	var tests5 = append(tests, []string{
+		"– Item1\n\n – Item2\n\n",
+		"<ul>\n<li><p>Item1</p>\n\n<ul>\n<li>Item2</li>\n</ul></li>\n</ul>\n",
+	}...)
+	doTestsBlock(t, tests5, EXTENSION_UNICODE_LIST_ITEM)
 }
 
 func TestOrderedList(t *testing.T) {
