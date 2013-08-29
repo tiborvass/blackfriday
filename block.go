@@ -932,8 +932,10 @@ func (p *parser) uliPrefix(data []byte) int {
 
 	hitUnicodeListItemMarker := false
 	r, sz := utf8.DecodeRune(data[i:])
-	if r == '–' && p.flags&EXTENSION_UNICODE_LIST_ITEM != 0 {
-		hitUnicodeListItemMarker = true
+	if p.flags&EXTENSION_UNICODE_LIST_ITEM != 0 {
+		if r == '–' || r == '＊' || r == '﹡' || r == '·' || r == '•' || r == '★' {
+			hitUnicodeListItemMarker = true
+		}
 	}
 
 	// need a *, +, or -
@@ -941,7 +943,7 @@ func (p *parser) uliPrefix(data []byte) int {
 		return 0
 	}
 	if hitUnicodeListItemMarker {
-		i += sz-1
+		i += sz - 1
 	}
 
 	if data[i+1] != ' ' {
@@ -949,7 +951,6 @@ func (p *parser) uliPrefix(data []byte) int {
 		if p.flags&EXTENSION_NO_SPACE_LISTS == 0 {
 			return 0
 		}
-
 
 		//not list
 		if data[i+1] == '\n' {
