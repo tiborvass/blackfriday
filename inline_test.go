@@ -13,9 +13,7 @@
 
 package blackfriday
 
-import (
-	"testing"
-)
+import "testing"
 
 func runMarkdownInline(input string, extensions, htmlFlags int) string {
 	extensions |= EXTENSION_AUTOLINK
@@ -229,8 +227,11 @@ func TestEmphasisMix(t *testing.T) {
 		"**improper *nesting** is* bad\n",
 		"<p><strong>improper *nesting</strong> is* bad</p>\n",
 
+		"***improper *nesting*** is* bad\n",
+		"<p><strong><em>improper *nesting</em></strong> is* bad</p>\n",
+
 		"*improper **nesting* is** bad\n",
-		"<p><em>improper **nesting</em> is** bad</p>\n",
+		"<p><em>improper </em><em>nesting</em> is** bad</p>\n",
 	}
 	doTestsInline(t, tests)
 }
@@ -445,6 +446,19 @@ func TestReferenceLink(t *testing.T) {
 
 		"[ref]\n   [ref]: /url/ \"title\"\n",
 		"<p><a href=\"/url/\" title=\"title\">ref</a></p>\n",
+	}
+	doTestsInline(t, tests)
+}
+
+func TestItalicAndBoldAreNeighbor(t *testing.T) {
+	var tests = []string{
+		//"*Italic* **Bold**\n",
+		//"<p><em>Italic</em> <strong>Bold</strong></p>\n",
+		"*Italic** hey\n",
+		"<p><em>Italic</em>* hey</p>\n",
+
+		"*Italic***Bold**\n",
+		"<p><em>Italic</em><strong>Bold</strong></p>\n",
 	}
 	doTestsInline(t, tests)
 }
