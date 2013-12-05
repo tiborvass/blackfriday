@@ -25,7 +25,7 @@ With Go 1 and git installed:
 
     go get github.com/russross/blackfriday
 
-will download, compile, and install the package into your `$GOROOT`
+will download, compile, and install the package into your `$GOPATH`
 directory hierarchy. Alternatively, you can import it into a
 project:
 
@@ -65,7 +65,7 @@ code:
 Note that if you have not already done so, installing
 `blackfriday-tool` will be sufficient to download and install
 blackfriday in addition to the tool itself. The tool binary will be
-installed in `$GOROOT/bin`.  This is a statically-linked binary that
+installed in `$GOPATH/bin`.  This is a statically-linked binary that
 can be copied to wherever you need it without worrying about
 dependencies and library versions.
 
@@ -92,7 +92,7 @@ All features of upskirt are supported, including:
 *   **Fast processing**. It is fast enough to render on-demand in
     most web applications without having to cache the output.
 
-*   **Thread safety**. You can run multiple parsers is different
+*   **Thread safety**. You can run multiple parsers in different
     goroutines without ill effect. There is no dependence on global
     shared state.
 
