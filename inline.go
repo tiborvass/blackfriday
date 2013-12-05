@@ -74,7 +74,6 @@ func emphasis(p *parser, out *bytes.Buffer, data []byte, offset int) int {
 		if ret = helperEmphasis(p, out, data[1:], c); ret == 0 {
 			return 0
 		}
-
 		return ret + 1
 	}
 
@@ -925,8 +924,10 @@ func helperFindEmphChar(data []byte, c byte) int {
 func helperEmphasis(p *parser, out *bytes.Buffer, data []byte, c byte) int {
 	i := 0
 
+	fromEmph3 := false
 	// skip one symbol if coming from emph3
 	if len(data) > 1 && data[0] == c && data[1] == c {
+		fromEmph3 = true
 		i = 1
 	}
 
@@ -941,6 +942,13 @@ func helperEmphasis(p *parser, out *bytes.Buffer, data []byte, c byte) int {
 		}
 
 		if i+1 < len(data) && data[i+1] == c {
+			if !fromEmph3 {
+				var work bytes.Buffer
+				p.inline(&work, data[:i])
+				p.r.Emphasis(out, work.Bytes())
+				return i + 1
+			}
+
 			i++
 			continue
 		}
