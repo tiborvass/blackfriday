@@ -457,7 +457,7 @@ func TestUnorderedList(t *testing.T) {
 		"<p><em><strong>triple emphasis</strong></em></p>\n",
 
 		"*improper **nesting* is** bad\n",
-		"<p><em>improper **nesting</em> is** bad</p>\n",
+		"<p><em>improper </em><em>nesting</em> is** bad</p>\n",
 
 		"-http://foo.com/\n",
 		"<ul>\n<li><a href=\"http://foo.com/\">http://foo.com/</a></li>\n</ul>\n",
