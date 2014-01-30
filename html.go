@@ -62,6 +62,7 @@ type Html struct {
 	tocMarker    int
 	headerCount  int
 	currentLevel int
+	maxLevel     int
 	toc          *bytes.Buffer
 
 	smartypants *smartypantsRenderer
@@ -79,7 +80,7 @@ const (
 // title is the title of the document, and css is a URL for the document's
 // stylesheet.
 // title and css are only used when HTML_COMPLETE_PAGE is selected.
-func HtmlRenderer(flags int, title string, css string) Renderer {
+func HtmlRenderer(flags int, title string, css string, maxLevel int) Renderer {
 	// configure the rendering engine
 	closeTag := htmlClose
 	if flags&HTML_USE_XHTML != 0 {
@@ -95,6 +96,7 @@ func HtmlRenderer(flags int, title string, css string) Renderer {
 		headerCount:  0,
 		currentLevel: 0,
 		toc:          new(bytes.Buffer),
+		maxLevel:     maxLevel,
 
 		smartypants: smartypants(flags),
 	}
@@ -150,7 +152,7 @@ func (options *Html) Header(out *bytes.Buffer, text func() bool, level int) {
 	marker := out.Len()
 	doubleSpace(out)
 
-	if options.flags&HTML_TOC != 0 {
+	if options.flags&HTML_TOC != 0 && (level <= options.maxLevel || options.maxLevel <= 0) {
 		// headerCount is incremented in htmlTocHeader
 		out.WriteString(fmt.Sprintf("<h%d id=\"toc_%d\">", level, options.headerCount))
 	} else {
@@ -164,7 +166,7 @@ func (options *Html) Header(out *bytes.Buffer, text func() bool, level int) {
 	}
 
 	// are we building a table of contents?
-	if options.flags&HTML_TOC != 0 {
+	if options.flags&HTML_TOC != 0 && (level <= options.maxLevel || options.maxLevel <= 0) {
 		options.TocHeader(out.Bytes()[tocMarker:], level)
 	}
 

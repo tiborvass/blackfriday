@@ -210,7 +210,7 @@ type parser struct {
 // MarkdownBasic is a convenience function for simple rendering.
 // It processes markdown input with no extensions enabled.
 func MarkdownBasic(input []byte) []byte {
-	return Markdown(input, HtmlRenderer(HTML_USE_XHTML, "", ""), 0)
+	return Markdown(input, HtmlRenderer(HTML_USE_XHTML, "", "", 0), 0)
 }
 
 // Call Markdown with most useful extensions enabled
@@ -231,7 +231,7 @@ func MarkdownBasic(input []byte) []byte {
 //
 // * Strict header parsing
 func MarkdownCommon(input []byte) []byte {
-	return Markdown(input, HtmlRenderer(HTML_COMMON, "", ""), EXTENSION_COMMON)
+	return Markdown(input, HtmlRenderer(HTML_COMMON, "", "", 0), EXTENSION_COMMON)
 }
 
 // Markdown is the main rendering function.
